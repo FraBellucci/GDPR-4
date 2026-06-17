@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<title>MOD4 – Ordina la Procedura di Breach</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Segoe UI',sans-serif;background:linear-gradient(135deg,#b71c1c,#c62828,#d32f2f);min-height:100vh;overflow:hidden;display:flex;justify-content:center;align-items:center}
+.container{background:#fff;width:800px;height:550px;display:flex;flex-direction:column;border-radius:10px;overflow:hidden;box-shadow:0 20px 60px rgba(0,0,0,.5)}
+.header{background:linear-gradient(135deg,#7f0000,#b71c1c);color:#fff;padding:11px 18px;display:flex;justify-content:space-between;align-items:center;flex-shrink:0}
+.header h1{font-size:15px;font-weight:700}.header p{font-size:11px;opacity:.8;margin-top:1px}
+button{padding:7px 13px;border:none;border-radius:6px;cursor:pointer;font-size:12px;font-weight:600;transition:all .2s}
+.btn-white{background:#fff;color:#7f0000}.btn-white:hover{background:#ffebee}
+.btn-outline{background:rgba(255,255,255,.15);color:#fff;border:1px solid rgba(255,255,255,.4)}.btn-outline:hover{background:rgba(255,255,255,.25)}
+.btn-group{display:flex;gap:8px}
+.content{flex:1;display:flex;flex-direction:column;overflow:hidden}
+.hidden{display:none!important}
+.instr{padding:18px 24px;overflow-y:auto;flex:1}
+.instr h2{color:#7f0000;font-size:16px;margin-bottom:10px}
+.instr p,.instr li{font-size:13px;line-height:1.6;color:#444;margin-bottom:5px}
+.instr ul{margin-left:18px;margin-bottom:10px}
+.how-grid{display:flex;gap:10px;margin:10px 0}
+.how-step{flex:1;background:#ffebee;border-radius:8px;padding:10px;text-align:center;font-size:12px;color:#7f0000;font-weight:600;line-height:1.5}
+.how-step .num{font-size:22px;display:block;margin-bottom:4px}
+.start-btn{background:linear-gradient(135deg,#7f0000,#b71c1c);color:#fff;padding:11px 32px;font-size:14px;border-radius:8px;display:block;margin:14px auto 0;cursor:pointer;border:none;font-weight:600}
+.start-btn:hover{transform:translateY(-2px)}
+.game-wrap{flex:1;display:flex;flex-direction:column;overflow:hidden;padding:10px 14px;gap:8px}
+.task-box{background:#fff3e0;border-left:4px solid #b71c1c;border-radius:8px;padding:10px 14px;flex-shrink:0;font-size:12px;color:#333;line-height:1.5}
+.game-area{flex:1;display:flex;gap:12px;min-height:0;overflow:hidden}
+.pool-col{flex:1;display:flex;flex-direction:column;gap:6px;overflow-y:auto}
+.pool-col h3{font-size:12px;font-weight:700;color:#7f0000;flex-shrink:0;padding-bottom:4px;border-bottom:2px solid #ffcdd2}
+.sequence-col{flex:1;display:flex;flex-direction:column;gap:6px;overflow-y:auto}
+.sequence-col h3{font-size:12px;font-weight:700;color:#7f0000;flex-shrink:0;padding-bottom:4px;border-bottom:2px solid #ffcdd2}
+.step-card{background:#fff;border:2px solid #ffcdd2;border-radius:8px;padding:8px 10px;font-size:11px;color:#333;line-height:1.4;cursor:grab;transition:all .2s;user-select:none;font-weight:500;display:flex;align-items:flex-start;gap:6px}
+.step-card:hover{border-color:#b71c1c;background:#ffebee;transform:translateY(-1px)}
+.step-card .step-icon{font-size:16px;flex-shrink:0}
+.seq-slot{border:2px dashed #ffcdd2;border-radius:8px;padding:8px 10px;font-size:11px;color:#bbb;min-height:46px;display:flex;align-items:center;gap:6px;transition:all .2s;position:relative}
+.seq-slot.drag-over{border-color:#b71c1c;background:#ffebee}
+.seq-slot.filled{border-style:solid;border-color:#b71c1c;background:#fff8f6}
+.seq-slot .slot-num{font-size:18px;font-weight:700;color:#ffcdd2;flex-shrink:0;min-width:24px;text-align:center}
+.seq-slot.filled .slot-num{color:#b71c1c}
+.seq-slot .slot-text{font-size:11px;color:#555;font-weight:500;line-height:1.3}
+.rm-x{position:absolute;top:4px;right:4px;background:#9e9e9e;color:#fff;border:none;border-radius:50%;width:14px;height:14px;font-size:9px;cursor:pointer;display:flex;align-items:center;justify-content:center;padding:0}
+.check-row{display:flex;gap:10px;align-items:center;flex-shrink:0}
+.check-btn{background:linear-gradient(135deg,#7f0000,#b71c1c);color:#fff;padding:8px 20px;font-size:12px;border-radius:7px;cursor:pointer;border:none;font-weight:600}
+.check-btn:disabled{background:#ccc;cursor:not-allowed}
+.fb-inline{font-size:12px;color:#555;flex:1}
+.result-page{flex:1;display:flex;align-items:center;justify-content:center;padding:20px}
+.result-box{text-align:center;max-width:480px}
+.result-icon{font-size:55px;margin-bottom:12px}
+.result-box h2{font-size:20px;font-weight:700;color:#7f0000;margin-bottom:8px}
+.result-box p{font-size:13px;color:#555;line-height:1.6;margin-bottom:15px}
+.result-score{background:#ffebee;border-radius:10px;padding:10px 20px;font-size:15px;font-weight:700;color:#7f0000;margin-bottom:15px;display:inline-block}
+.result-btns{display:flex;gap:10px;justify-content:center}
+.btn-prim{background:linear-gradient(135deg,#7f0000,#b71c1c);color:#fff;padding:10px 24px;font-size:13px;border-radius:8px;cursor:pointer;border:none;font-weight:600}
+.btn-sec{background:#78909c;color:#fff;padding:10px 24px;font-size:13px;border-radius:8px;cursor:pointer;border:none;font-weight:600}
+</style>
+</head>
+<body>
+<div class="container">
+  <div class="header">
+    <div><h1>🚨 Ordina la Procedura di Data Breach</h1><p>Modulo 4 – Violazione dei dati: riconoscerla, gestirla e notificarla</p></div>
+    <div class="btn-group">
+      <button class="btn-outline" onclick="resetGame()">🔄 Rigioca</button>
+      <button class="btn-white" onclick="window.close()">Torna al corso</button>
+    </div>
+  </div>
+  <div class="content">
+    <div id="instrPage" class="instr">
+      <h2>🎯 Come funziona</h2>
+      <p>Quando si verifica una violazione dei dati, le azioni da intraprendere seguono una sequenza precisa. Mettere i passi nell'ordine sbagliato può compromettere la risposta all'incidente.</p>
+      <div class="how-grid">
+        <div class="how-step"><span class="num">👁️</span>Leggi tutti i passi nella colonna sinistra</div>
+        <div class="how-step"><span class="num">↔️</span>Trascinali nella colonna destra nell'ordine corretto</div>
+        <div class="how-step"><span class="num">✓</span>Clicca Verifica per vedere il risultato</div>
+      </div>
+      <ul><li>Ci sono <strong>2 scenari</strong> da ordinare: un breach interno e una notifica al Garante</li><li>La sequenza corretta riflette gli obblighi del GDPR (Art. 33 e 34)</li></ul>
+      <button class="start-btn" onclick="startGame()">▶ Inizia</button>
+    </div>
+    <div id="gamePage" class="game-wrap hidden">
+      <div class="task-box" id="taskBox"></div>
+      <div class="game-area">
+        <div class="pool-col"><h3>📋 Azioni disponibili (clicca per aggiungere)</h3><div id="poolArea"></div></div>
+        <div class="sequence-col"><h3>🔢 La tua sequenza (ordine 1→<span id="seqLen">6</span>)</h3><div id="seqArea"></div></div>
+      </div>
+      <div class="check-row">
+        <button class="check-btn" id="checkBtn" onclick="checkSequence()" disabled>Verifica sequenza ✓</button>
+        <div class="fb-inline" id="fbInline"></div>
+      </div>
+    </div>
+    <div id="resultPage" class="result-page hidden">
+      <div class="result-box">
+        <div class="result-icon" id="resultIcon"></div>
+        <h2 id="resultTitle"></h2><p id="resultText"></p>
+        <div class="result-score" id="resultScore"></div>
+        <div class="result-btns">
+          <button class="btn-prim" onclick="resetGame()">🔄 Rigioca</button>
+          <button class="btn-sec" onclick="window.close()">Torna al corso</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+const ROUNDS=[
+  {title:'Breach rilevato internamente',task:'Un dipendente segnala di aver inviato per errore un file con dati personali di 300 clienti a un indirizzo email sbagliato. Metti in ordine le 6 azioni da intraprendere.',
+   steps:[
+    {id:'a',icon:'🔎',text:'Valutare l\'entità del breach: quanti dati, quali categorie, quale rischio per gli interessati'},
+    {id:'b',icon:'📞',text:'Segnalare immediatamente l\'incidente al responsabile o al DPO'},
+    {id:'c',icon:'🛑',text:'Contenere il breach: tentare di bloccare l\'accesso ai dati (es. revocare l\'accesso all\'email se possibile)'},
+    {id:'d',icon:'📝',text:'Documentare l\'incidente nel registro dei data breach'},
+    {id:'e',icon:'🏛️',text:'Notificare al Garante entro 72 ore se il breach presenta un rischio per i diritti degli interessati'},
+    {id:'f',icon:'📢',text:'Comunicare agli interessati se il breach presenta un rischio elevato per i loro diritti e libertà'},
+   ],correct:['b','c','a','d','e','f']},
+  {title:'Valutazione della notifica al Garante',task:'È stata rilevata una violazione: un database di dipendenti è stato accessibile dall\'esterno per 4 ore. Metti in ordine le 6 azioni per gestire la notifica.',
+   steps:[
+    {id:'a',icon:'⏱️',text:'Verificare quando è iniziata la violazione per calcolare il tempo disponibile per la notifica (max 72h)'},
+    {id:'b',icon:'📊',text:'Classificare il rischio: basso, medio o alto per i diritti e le libertà degli interessati'},
+    {id:'c',icon:'🔐',text:'Adottare misure correttive immediate per chiudere la vulnerabilità'},
+    {id:'d',icon:'📋',text:'Raccogliere tutte le informazioni richieste per la notifica: natura del breach, categorie di dati, numero di persone coinvolte'},
+    {id:'e',icon:'🏛️',text:'Inviare la notifica al Garante tramite il portale ufficiale'},
+    {id:'f',icon:'📁',text:'Archiviare tutta la documentazione dell\'incidente e delle misure adottate'},
+   ],correct:['a','c','b','d','e','f']},
+];
+let cur=0,score=0,seqData=[],draggedId=null;
+function startGame(){cur=0;score=0;loadRound();showPage('gamePage');}
+function loadRound(){if(cur>=ROUNDS.length){endGame();return;}seqData=Array(ROUNDS[cur].steps.length).fill(null);const r=ROUNDS[cur];document.getElementById('seqLen').textContent=r.steps.length;document.getElementById('taskBox').innerHTML='<strong>📋 Scenario:</strong> '+r.task;document.getElementById('fbInline').textContent='';document.getElementById('checkBtn').disabled=true;renderPool();renderSeq();}
+function renderPool(){const r=ROUNDS[cur];const area=document.getElementById('poolArea');area.innerHTML='';[...r.steps].sort(()=>Math.random()-.5).forEach(s=>{if(seqData.includes(s.id))return;const d=document.createElement('div');d.className='step-card';d.draggable=true;d.dataset.id=s.id;d.innerHTML=`<span class="step-icon">${s.icon}</span><span>${s.text}</span>`;d.ondragstart=e=>{draggedId=s.id;};d.onclick=()=>addToFirstEmpty(s.id);area.appendChild(d);});}
+function addToFirstEmpty(id){const idx=seqData.indexOf(null);if(idx<0)return;seqData[idx]=id;renderPool();renderSeq();document.getElementById('checkBtn').disabled=seqData.includes(null);}
+function renderSeq(){const r=ROUNDS[cur];const area=document.getElementById('seqArea');area.innerHTML='';for(let i=0;i<r.steps.length;i++){const slot=document.createElement('div');slot.className='seq-slot'+(seqData[i]?' filled':'');slot.ondragover=e=>{e.preventDefault();slot.classList.add('drag-over');};slot.ondragleave=()=>slot.classList.remove('drag-over');slot.ondrop=e=>{e.preventDefault();slot.classList.remove('drag-over');if(!draggedId)return;const existing=seqData.indexOf(draggedId);if(existing>=0)seqData[existing]=null;seqData[i]=draggedId;draggedId=null;renderPool();renderSeq();document.getElementById('checkBtn').disabled=seqData.includes(null);};slot.innerHTML=`<span class="slot-num">${i+1}</span>`;if(seqData[i]){const s=r.steps.find(x=>x.id===seqData[i]);const txt=document.createElement('span');txt.className='slot-text';txt.textContent=s.icon+' '+s.text;slot.appendChild(txt);const rm=document.createElement('button');rm.className='rm-x';rm.textContent='×';rm.onclick=()=>{seqData[i]=null;renderPool();renderSeq();document.getElementById('checkBtn').disabled=seqData.includes(null);};slot.appendChild(rm);}else{const ph=document.createElement('span');ph.style.cssText='font-size:11px;color:#ccc';ph.textContent='Trascina qui il passo '+(i+1);slot.appendChild(ph);}area.appendChild(slot);}}
+function checkSequence(){const r=ROUNDS[cur];let correct=0;seqData.forEach((id,i)=>{if(id===r.correct[i])correct++;});const allCorrect=correct===r.steps.length;if(allCorrect)score++;document.getElementById('fbInline').innerHTML=allCorrect?'<span style="color:#2e7d32;font-weight:700">✓ Sequenza corretta!</span>':'<span style="color:#c62828;font-weight:700">✗ '+correct+'/'+r.steps.length+' passi nella posizione corretta.</span>';document.getElementById('checkBtn').disabled=true;setTimeout(()=>{cur++;loadRound();},allCorrect?1200:2000);}
+function endGame(){const pct=score>=2?100:score===1?50:0;document.getElementById('resultIcon').textContent=score>=2?'🎉':score===1?'👍':'💪';document.getElementById('resultTitle').textContent=score>=2?'Procedura perfetta!':score===1?'Buona base!':'Riprova!';document.getElementById('resultText').textContent='In un data breach ogni minuto conta. La sequenza corretta — contenimento, valutazione, documentazione, notifica al Garante entro 72 ore, comunicazione agli interessati se il rischio è elevato — non è opzionale: è un obbligo di legge.';document.getElementById('resultScore').textContent='Scenari corretti: '+score+'/'+ROUNDS.length;showPage('resultPage');}
+function resetGame(){showPage('instrPage');}
+function showPage(id){['instrPage','gamePage','resultPage'].forEach(p=>document.getElementById(p).classList.add('hidden'));document.getElementById(id).classList.remove('hidden');}
+</script>
+</body>
+</html>
